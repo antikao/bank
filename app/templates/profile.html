@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <p class="h2">Здравствуйте, {{ current_user.name }}</P>
+      <form method="POST" action="/accounts" enctype="multipart/form-data">
+        <button type="submit" class="btn btn-primary">Создать кошелек</button>
+      </form>
+      <div class="row row-cols-1 row-cols-md-3 mt-50">
+{% for account in accounts %}
+<div class="card" style="width: 15rem;">
+  <div class="card-body">
+    <h5 class="card-title">{{ account.number }}</h5>
+    <h6> Баланс: </h6 class="card-subtitle mb-2 text-body-secondary">{{ account.balance }}</h6>
+    <hr>
+    <a href="/accounts/{{account.id}}"><button type="button" class="btn btn-primary">Перейти</button></a>
+  </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

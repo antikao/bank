@@ -1,0 +1,20 @@
+version: "2"
+services:
+  backend:
+    container_name: bank_backend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./Docker/backend.Dockerfile
+    ports:
+      - 3000:3000
+  nginx:
+    container_name: bank_nginx
+      restart: unless-stopped
+      build:
+        context: .
+        dockerfile: ./Docker/nginx/nginx.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./Docker/nginx/config:/etc/nginx/conf.d

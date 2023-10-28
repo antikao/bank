@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+<div class="container">
+      <div class="div-block-6">
+        <a href="/profile" class="btn btn-secondary">Назад</a>
+        <h1 class="heading-2">Информация о кошельке</h1>
+        <div class="div-block-5">
+          <a href="/delete_account/{{account_id}}" class="btn btn-danger">Удалить</a>
+          <a href="#" class="btn btn-success" onclick="openModal()">Перевести</a>
+        </div>
+      </div>
+      <div class="div-block-7">
+        <div>{{account.number}}</div>
+        <div class="text-block-3">{{account.balance}}</div>
+      </div>
+      <h2>История транзакций</h2>
+      {%for transaction in transactions%}
+      <div class="div-block-4">
+        <div class="div-block-3">
+          <div class="div-block-2">
+            {%if transaction.referer_account_id == account_id%}
+            <div class="text-block-2">Тип перевода: Входящий</div>
+            {%else%}
+            <div class="text-block-2">Тип перевода: Исходящий</div>
+            {%endif%}
+            <div>{{transaction.created_at}}</div>
+          </div>
+          <div>
+            {%if transaction.referer_account_id == account_id%}
+            <div>Отправитель: {{transaction.sender_account_id}}</div>
+            {%else%}
+            <div>Получатель: {{transaction.referer_account_id}}</div>
+            {%endif%}
+            <div>Сумма: {{transaction.amount}}</div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+    <div class="modal" tabindex="-1" id="payment">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Перевод</h5>
+            <button type="button" class="btn-close" onlick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="/transactions">
+              <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="account_number" placeholder="uuid">
+                </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                  <input class="input is-large" type="text" name="amount" placeholder="100.0">
+              </div>
+          </div>
+          <input style="display: none;" type="text" name="sender_account_id" value="{{account_id}}">
+          <button class="button is-block is-info is-large">Отправить</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function openModal(){
+        document.getElementById("payment").style.display="block";
+      }
+      function closeModal(){
+        document.getElementById("payment").style.display="none";
+      }
+    </script>
+{% endblock %}
