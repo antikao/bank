@@ -10,11 +10,13 @@ services:
       - 3000:3000
   nginx:
     container_name: bank_nginx
-      restart: unless-stopped
-      build:
-        context: .
-        dockerfile: ./Docker/nginx/nginx.Dockerfile
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./Docker/nginx/nginx.Dockerfile
     ports:
-      - 3000:3000
+      - 80:80
+      - 443:443
     volumes:
       - ./Docker/nginx/config:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
